@@ -1,11 +1,14 @@
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Body
 
 app = FastAPI()
 
 API_KEY = "test123"
 
-@app.post("/honeypot")
-def honeypot(x_api_key: str = Header(...)):
+@app.api_route("/honeypot", methods=["POST", "GET"])
+def honeypot(
+    payload: dict = Body(default=None),
+    x_api_key: str = Header(None)
+):
     if x_api_key != API_KEY:
         raise HTTPException(status_code=401, detail="Invalid API key")
 
