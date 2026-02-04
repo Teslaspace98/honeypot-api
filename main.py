@@ -6,8 +6,13 @@ API_KEY = "test123"
 
 from typing import Optional
 
+from fastapi import Body
+
 @app.post("/honeypot")
-def honeypot(payload: dict = {}, x_api_key: str = Header(None)):
+def honeypot(
+    payload: dict | None = Body(default=None),
+    x_api_key: str = Header(None)
+):
     if x_api_key != API_KEY:
         raise HTTPException(status_code=401, detail="Invalid API key")
 
